@@ -81,7 +81,7 @@
             "7": 7,
             "8": 8
           },
-          "default": "",
+          "default": 1,
           "value": "",
           "precision": 2,
           "address": "/A/chan",
@@ -288,7 +288,7 @@
             "7": 7,
             "8": 8
           },
-          "default": "",
+          "default": 2,
           "value": "",
           "precision": 2,
           "address": "/B/chan",
@@ -555,7 +555,7 @@
             "7": 7,
             "8": 8
           },
-          "default": "",
+          "default": 3,
           "value": "",
           "precision": 2,
           "address": "/C/chan",
@@ -752,7 +752,7 @@
           "label": "Out Chan",
           "color": "auto",
           "css": "",
-          "default": "",
+          "default": 1,
           "value": "",
           "address": "/outchan",
           "preArgs": "",
@@ -994,7 +994,7 @@
           "vertical": false,
           "wrap": false,
           "align": "left",
-          "default": "",
+          "default": "---",
           "value": "",
           "address": "/info",
           "preArgs": ""
@@ -1101,7 +1101,7 @@
             "4": 4
           },
           "traversing": true,
-          "default": "",
+          "default": 1,
           "value": "",
           "precision": 0,
           "address": "/preset",
@@ -1183,7 +1183,7 @@
           "type": "push",
           "top": 20,
           "left": 180,
-          "id": "exit",
+          "id": "restart",
           "linkId": "",
           "width": 120,
           "height": 90,

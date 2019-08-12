@@ -2,6 +2,9 @@
 
 CSD=tuningfork.csd
 INSTANCE=Lamento
+CSOUND_PORT=9990
+OPENSTAGECONTROL_PORT=9991
+HOST="127.0.0.1"
 
 case "$(uname -s)" in
 
@@ -14,9 +17,7 @@ case "$(uname -s)" in
         echo "Running on Linux..."
         jack_control status
         if [[ $? != 0 ]]; then
-            echo
-            echo "Jack not running, stopping"
-            echo
+            echo "!!!!!!!!!!!!  Jack not running, stopping  !!!!!!!!!!!"
             exit -1
         fi
         csoundopts="-+rtaudio=jack -+rtmidi=portmidi -Ma --env:CSNOSTOP=yes --omacro:USEOSC=1"
@@ -26,14 +27,16 @@ case "$(uname -s)" in
 esac
 
 log() {
-    echo -e "\n::::::::: $1\n"
+    echo
+    echo "::::::::: $1"
+    echo
 }
 
 msg () {
-    echo -e "\n******************* $1 *******************\n"
+    echo
+    echo "******************* $1 *******************"
+    echo
 }
-
-
 
 echo
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
@@ -50,8 +53,15 @@ launchosc() {
         sleep 0.2
     done
             
-    "$openstagecontrol" --osc-port 9991 --send 127.0.0.1:9990 --load tuningfork-ui.json \
-        --state tuningfork-ui.state --theme flat --instance-name "$INSTANCE"        
+    "$openstagecontrol"                   \
+        --osc-port $OPENSTAGECONTROL_PORT \
+        --send $HOST:$CSOUND_PORT \
+        --load tuningfork-ui.json \
+        --theme flat \
+        --instance-name "$INSTANCE" \
+        --state tuningfork-ui.state \
+        --remote-root "$(realpath .)"
+                
 }
 
 
