@@ -1,0 +1,76 @@
+#!/bin/bash
+
+CSD=tuningfork.csd
+INSTANCE=Lamento
+
+case "$(uname -s)" in
+
+    Darwin*)
+        csoundopts="--env:CSNOSTOP=yes --omacro:USEOSC=1"
+        openstagecontrol="/Applications/open-stage-control.app/Contents/MacOS/open-stage-control"
+        ;;
+
+    Linux*)
+        echo "Running on Linux..."
+        jack_control status
+        if [[ $? != 0 ]]; then
+            echo
+            echo "Jack not running, stopping"
+            echo
+            exit -1
+        fi
+        csoundopts="-+rtaudio=jack -+rtmidi=portmidi -Ma --env:CSNOSTOP=yes --omacro:USEOSC=1"
+        openstagecontrol=open-stage-control
+        ;;
+        
+esac
+
+log() {
+    echo -e "\n> > > > $1\n"
+}
+
+msg () {
+    echo -e "\n******************* $1 *******************\n"
+}
+
+
+
+echo
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo "          Lamento           "
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo
+
+log "Launching Open Stage Control"
+
+"$openstagecontrol" --osc-port 9991 --send 127.0.0.1:9990 --load tuningfork-ui.json \
+--state tuningfork-ui.state --theme flat --instance-name "$INSTANCE" &
+
+sleep 1
+log "Waiting until Open Stage Control starts"
+
+for x in $(seq 5); do
+    echo -n "$x "
+    sleep 1
+done
+
+
+echo "csound $csoundopts $CSD"
+
+
+while true; do
+    rm --force exitcode.txt
+    csound $csoundopts "$CSD"
+    exitcode="$(cat exitcode.txt)"
+    log "Csound exited, exitcode.txt = $exitcode"
+    if [[ "$exitcode" == "0" ]]; then
+        break
+    fi
+    msg "Restarting"
+    sleep 1
+done 
+
+
+log "Csound exited with code $?"
+log "Shutting down Open Stage Control"
+kill $(jobs -p)
