@@ -26,7 +26,7 @@ case "$(uname -s)" in
 esac
 
 log() {
-    echo -e "\n> > > > $1\n"
+    echo -e "\n::::::::: $1\n"
 }
 
 msg () {
@@ -43,16 +43,21 @@ echo
 
 log "Launching Open Stage Control"
 
-"$openstagecontrol" --osc-port 9991 --send 127.0.0.1:9990 --load tuningfork-ui.json \
---state tuningfork-ui.state --theme flat --instance-name "$INSTANCE" &
+launchosc() {
+    echo
+    for x in $(seq 10); do
+        echo -n "$x "
+        sleep 0.2
+    done
+            
+    "$openstagecontrol" --osc-port 9991 --send 127.0.0.1:9990 --load tuningfork-ui.json \
+        --state tuningfork-ui.state --theme flat --instance-name "$INSTANCE"        
+}
 
-sleep 1
+
 log "Waiting until Open Stage Control starts"
 
-for x in $(seq 5); do
-    echo -n "$x "
-    sleep 1
-done
+launchosc &
 
 
 echo "csound $csoundopts $CSD"
@@ -61,16 +66,27 @@ echo "csound $csoundopts $CSD"
 while true; do
     rm --force exitcode.txt
     csound $csoundopts "$CSD"
+
+    if [ ! -e exitcode.txt ]; then
+        # file does not exist, so csound exited by something like ctrl-c
+        log "Csound interrupted"
+        break
+    fi 
+        
     exitcode="$(cat exitcode.txt)"
     log "Csound exited, exitcode.txt = $exitcode"
-    if [[ "$exitcode" == "0" ]]; then
-        break
+    if [[ "$exitcode" != "0" ]]; then
+        msg "Restarting"
+        sleep 1
+        continue
     fi
-    msg "Restarting"
-    sleep 1
+    break
 done 
 
 
 log "Csound exited with code $?"
 log "Shutting down Open Stage Control"
-kill $(jobs -p)
+pkill -f "open-stage-control(.)*$INSTANCE"
+# kill $(jobs -p)
+sleep 1
+log "Exiting"
