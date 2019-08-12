@@ -8,6 +8,8 @@ To use CsoundQT, open tuningfork.csd in CsoundQT
 
 # Open Stage Control
 
+![](Lamento_OpenStageControl.jpg)
+
 Download and install Open-Stage-Control from https://openstagecontrol.ammd.net
 
 * In macOS, just place the .app file in /Applications. 
