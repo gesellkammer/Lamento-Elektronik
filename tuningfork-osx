@@ -34,7 +34,7 @@ launchosc() {
 launchosc &
 
 while true; do
-    rm --force exitcode.txt
+    rm -f exitcode.txt
     
     csound -+rtaudio=$AUDIOMODULE --env:CSNOSTOP=yes --omacro:USEOSC=1 "$CSD"
 
