@@ -1,21 +1,16 @@
-The patch to control the tuning forks can be used with two GUIs: 
-* csoundqt 
-* open-stage-control.
+# bemessung 4 - lamento 
 
-# CsoundQT
+## Tuning Forks
 
-To use CsoundQT, open tuningfork.csd in CsoundQT
+To run this patch you need
 
-# Open Stage Control
+* csound >= 6.14 (Download from https://github.com/csound/csound/releases)
+* CsoundQt >= 0.9.8 (Download from https://github.com/CsoundQt/CsoundQt/releases)
 
-![](Lamento_OpenStageControl.jpg)
+**NB**: Notice that the CsoundQt provided with csound `6.14` is **too old**. Uninstall the older version
+(`0.9.7`) and install the newer (`0.9.8.1` at the time of this writing) instead.
 
-Download and install Open-Stage-Control from https://openstagecontrol.ammd.net
+Open the file lamento-tuningfork-v3.csd in CsoundQt
+More detailed instructions are inside the `.csd` itself
 
-* In macOS, just place the .app file in /Applications. 
-* In Linux, install the .deb file (make sure that open-stage-control is in the path)
-
-Open a terminal in this directory, then execute at the prompt:
-
-    $ ./tuningfork-start
-
+![](https://i.imgur.com/QFrns9Y.png)
